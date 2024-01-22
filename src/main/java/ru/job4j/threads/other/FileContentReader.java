@@ -19,18 +19,18 @@ public class FileContentReader {
     }
 
     private String readerStream(Predicate<Character> filter) {
-        String output = "";
+        StringBuilder builder = new StringBuilder();
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(file))) {
             int data;
-            while ((data = input.read()) > 0) {
+            while ((data = input.read()) != -1) {
                 char temp = (char) data;
                 if (filter.test(temp)) {
-                    output += temp;
+                    builder.append(temp);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return output;
+        return builder.toString();
     }
 }
