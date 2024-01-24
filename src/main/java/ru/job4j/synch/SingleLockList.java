@@ -30,22 +30,7 @@ public class SingleLockList<T> implements Iterable<T> {
 
     @Override
     public synchronized Iterator<T> iterator() {
-        return new Iterator<T>() {
-            private int position = 0;
-
-            @Override
-            public boolean hasNext() {
-                return position < list.size();
-            }
-
-            @Override
-            public T next() {
-                if (!hasNext()) {
-                    throw new ArrayIndexOutOfBoundsException();
-                }
-                return get(position++);
-            }
-        };
+        return copy(list).iterator();
     }
 
     @Override
