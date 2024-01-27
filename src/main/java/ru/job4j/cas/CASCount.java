@@ -2,11 +2,11 @@ package ru.job4j.cas;
 
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 public class CASCount {
-    private final AtomicReference<Integer> count = new AtomicReference<>(0);
+    private final AtomicInteger count = new AtomicInteger(0);
 
     public void increment() {
         int temp;
@@ -22,12 +22,12 @@ public class CASCount {
     public static void main(String[] args) throws InterruptedException {
         CASCount count = new CASCount();
         Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10000000; i++) {
                 count.increment();
             }
         });
         Thread thread2 = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10000000; i++) {
                 count.increment();
             }
         });
