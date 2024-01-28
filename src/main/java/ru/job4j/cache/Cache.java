@@ -6,20 +6,24 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-public class Cache {
+public class Cache extends RuntimeException {
     private final Map<Integer, Base> memory = new ConcurrentHashMap<>();
 
-    public boolean add(Base model) {
+    public boolean add(Base model) throws OptimisticException {
         return memory.putIfAbsent(model.id(), model) != null;
     }
 
     public boolean update(Base model) throws OptimisticException {
-        Base stored = memory.get(model.id());
-        if (stored.version() != model.version()) {
-            throw new OptimisticException("Versions are not equal");
-        }
-        return memory.computeIfPresent(model.id(), (key, value) ->
-                new Base(model.id(), model.name(), model.version() + 1)) != null;
+        return memory.computeIfPresent(model.id(), (key, value) -> {
+            if (model.version() != value.version()) {
+                try {
+                    throw new OptimisticException("Versions are not equal");
+                } catch (OptimisticException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return new Base(model.id(), model.name(), model.version() + 1);
+        }) != null;
     }
 
     public void delete(int id) {
