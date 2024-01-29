@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-public class Cache extends RuntimeException {
+public class Cache {
     private final Map<Integer, Base> memory = new ConcurrentHashMap<>();
 
     public boolean add(Base model) throws OptimisticException {
