@@ -16,11 +16,7 @@ public class Cache {
     public boolean update(Base model) throws OptimisticException {
         return memory.computeIfPresent(model.id(), (key, value) -> {
             if (model.version() != value.version()) {
-                try {
-                    throw new OptimisticException("Versions are not equal");
-                } catch (OptimisticException e) {
-                    throw new RuntimeException(e);
-                }
+                throw new OptimisticException("Versions are not equal");
             }
             return new Base(model.id(), model.name(), model.version() + 1);
         }) != null;
