@@ -6,16 +6,13 @@ public class ParallelSearch {
 
     public static void main(String[] args) throws InterruptedException {
         int maxFiles = 10;
-        AtomicInteger atomicInteger = new AtomicInteger(0);
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(maxFiles);
         final Thread consumer = new Thread(
                 () -> {
-                    while (atomicInteger.get() < maxFiles) {
+                    while (!Thread.currentThread().isInterrupted()) {
                         try {
                             System.out.println("read file number = " + queue.poll());
-                            atomicInteger.incrementAndGet();
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
                             Thread.currentThread().interrupt();
                         }
                     }
@@ -37,8 +34,7 @@ public class ParallelSearch {
         );
         consumer.start();
         producer.start();
-        consumer.join();
         producer.join();
-        System.out.println("finish");
+        consumer.interrupt();
     }
 }
