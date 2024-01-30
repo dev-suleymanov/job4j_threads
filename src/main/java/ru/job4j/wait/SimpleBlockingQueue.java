@@ -33,6 +33,10 @@ public class SimpleBlockingQueue<T> {
     public int size() {
         return queue.size();
     }
+
+    public boolean isEmpty() {
+        return size() == 0;
+    }
     public static void main(String[] args) throws InterruptedException {
         SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<>(10);
         Thread thread1 = new Thread(() -> {
