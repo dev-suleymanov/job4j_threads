@@ -40,32 +40,4 @@ public class SimpleBlockingQueue<T> {
     public synchronized boolean isEmpty() {
         return size() == 0;
     }
-
-    public static void main(String[] args) throws InterruptedException {
-        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<>(10);
-        Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
-                try {
-                    simpleBlockingQueue.offer(i);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.printf("%s = %d size\n",
-                    Thread.currentThread().getName(), simpleBlockingQueue.size());
-        });
-        Thread thread2 = new Thread(() -> {
-            try {
-                System.out.printf("%s = %d poll\n",
-                        Thread.currentThread().getName(), simpleBlockingQueue.poll());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        thread1.start();
-        thread2.start();
-        thread1.join();
-        thread2.join();
-        System.out.printf("%s = %d size\n", Thread.currentThread().getName(), simpleBlockingQueue.size());
-    }
 }
