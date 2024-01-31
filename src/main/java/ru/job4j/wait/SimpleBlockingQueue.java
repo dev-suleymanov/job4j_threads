@@ -15,6 +15,7 @@ public class SimpleBlockingQueue<T> {
     public SimpleBlockingQueue(int size) {
         this.size = size;
     }
+
     public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == size) {
             this.wait();
@@ -22,6 +23,7 @@ public class SimpleBlockingQueue<T> {
         queue.add(value);
         this.notifyAll();
     }
+
     public synchronized T poll() throws InterruptedException {
         while (queue.isEmpty()) {
             this.wait();
@@ -30,13 +32,15 @@ public class SimpleBlockingQueue<T> {
         this.notifyAll();
         return result;
     }
+
     public int size() {
         return queue.size();
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return size() == 0;
     }
+
     public static void main(String[] args) throws InterruptedException {
         SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<>(10);
         Thread thread1 = new Thread(() -> {
