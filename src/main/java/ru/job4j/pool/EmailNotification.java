@@ -20,6 +20,13 @@ public class EmailNotification {
 
     public void close() {
         service.shutdown();
+        while (!service.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args) {
