@@ -9,7 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Wget implements Runnable {
     private final String url;
-    private final int speed; // Скорость в байтах в секунду
+
+    /*
+        Скорость в байтах в секунду
+    */
+    private final int speed;
 
     public Wget(String url, int speed) {
         this.url = url;
@@ -28,7 +32,9 @@ public class Wget implements Runnable {
             long nextTimeToWrite = System.nanoTime();
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
                 long currentTime = System.nanoTime();
-                // Применение ограничения скорости
+                /*
+                    Применение ограничения скорости
+                */
                 long elapsedTime = currentTime - nextTimeToWrite;
                 long requiredTime = TimeUnit.MILLISECONDS.toNanos(bytesRead * 1000L / speed);
                 if (elapsedTime < requiredTime) {
