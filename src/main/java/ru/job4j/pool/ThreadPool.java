@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 public class ThreadPool {
     private final List<Thread> threads = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(10);
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(Runtime.getRuntime().availableProcessors());
 
     public ThreadPool() {
         IntStream.range(0, Runtime.getRuntime().availableProcessors())
